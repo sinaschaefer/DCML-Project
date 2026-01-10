@@ -18,6 +18,9 @@ import csv
 from pynput import keyboard
 from datetime import datetime
 
+# define time interval in seconds in which anomalous data is input
+anomalous_window = 20
+
 # define file name for logging file of keyboard activity
 # note: the file will not be overwritten data just get appended
 log_file = "key_log.csv"
@@ -29,6 +32,8 @@ def on_press(key):
   try:
     # get current timestamp
     timestamp = datetime.now()
+    # Convert to float
+    #timestamp = now.timestamp()
     
     # determine the key string representation
     if hasattr(key, 'char') and key.char is not None:
@@ -51,6 +56,8 @@ def on_release(key):
   try:
     # get current timestamp
     timestamp = datetime.now()
+    # Convert to float and to milliseconds
+    #timestamp = now.timestamp() * 1000
 
   # determine the key string representation
     if hasattr(key, 'char') and key.char is not None:
@@ -70,7 +77,7 @@ def on_release(key):
 
 
 def main():
-  duration = 30  # Duration in seconds
+  duration = 100  # duration of input time in seconds
   
   # Initialize the listener
   listener = keyboard.Listener(on_press=on_press, on_release=on_release)
@@ -89,6 +96,10 @@ def main():
       # Calculate remaining time
       remaining = int(duration - (time.time() - start_time))
       print(f"Time remaining: {remaining}", end="\r")
+
+      # creating anomalous data for the last 20 seconds of the time
+      if(remaining == anomalous_window):
+        print("input 'anomolous' data:")
       time.sleep(1) # Check every second
           
   except KeyboardInterrupt:
