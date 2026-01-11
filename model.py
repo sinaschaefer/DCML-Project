@@ -24,12 +24,15 @@ from sklearn.preprocessing import StandardScaler
 # get data from data processing
 press_time = dataProcessing.filtered
 wait_time = dataProcessing.timeData
-# TODO: add labels to the data and also split them with the rest of the data
-press_label = dataProcessing.filtered_labels
-wait_label = dataProcessing.timeData_labels
+
+# add labels to the data and also split them with the rest of the data
+press_label = dataProcessing.press_labels
+press_label = np.ravel(press_label)
+wait_label  = dataProcessing.wait_labels
+wait_label = np.ravel(wait_label)
 
 # split data into train and test data
-# TODO: add splits for the labels to the corresponding data splits
+# add splits for the labels to the corresponding data splits
 press_train, press_test, press_label_train, press_label_test = train_test_split(press_time, press_label, test_size=0.2, random_state=42)
 wait_train, wait_test, wait_label_train, wait_label_test = train_test_split(wait_time, wait_label, test_size=0.2, random_state=42)
 
@@ -39,7 +42,6 @@ press_train = scaler.fit_transform(press_train)
 press_test  = scaler.transform(press_test)
 wait_train  = scaler.fit_transform(wait_train)
 wait_test   = scaler.transform(wait_test)
-
 
 # initialise the clasifier and train model
 knn = KNeighborsClassifier(n_neighbors=5)

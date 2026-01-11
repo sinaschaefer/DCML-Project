@@ -19,7 +19,7 @@ from pynput import keyboard
 from datetime import datetime
 
 # define time interval in seconds in which anomalous data is input
-anomalous_window = 20
+anomalous_window = 10
 
 # define file name for logging file of keyboard activity
 # note: the file will not be overwritten data just get appended
@@ -32,19 +32,17 @@ def on_press(key):
   try:
     # get current timestamp
     timestamp = datetime.now()
-    # Convert to float
-    #timestamp = now.timestamp()
     
     # determine the key string representation
     if hasattr(key, 'char') and key.char is not None:
-        k = key.char  # alphanumeric keys
+        k = ord(key.char)  # alphanumeric keys
     else:
-        k = str(key)  # special keys e.g. space, enter, etc.
+        k = hash(key)  # special keys e.g. space, enter, etc.
 
-    # append to the CSV file: key, timestamp and D('down' for key press)
+    # append to the CSV file: key, timestamp and 1 for key press
     with open(log_file, mode='a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
-        writer.writerow([timestamp, k, "D"])
+        writer.writerow([timestamp, k, 1])
           
   except Exception as e:
     print(f"Error: {e}")
@@ -56,19 +54,17 @@ def on_release(key):
   try:
     # get current timestamp
     timestamp = datetime.now()
-    # Convert to float and to milliseconds
-    #timestamp = now.timestamp() * 1000
 
   # determine the key string representation
     if hasattr(key, 'char') and key.char is not None:
-        k = key.char  # alphanumeric keys
+        k = ord(key.char)  # alphanumeric keys
     else:
-        k = str(key)  # special keys e.g. space, enter, etc.
+        k = hash(key)  # special keys e.g. space, enter, etc.
     
-    # append to the CSV file: key, timestamp and U('up' for key release)
+    # append to the CSV file: key, timestamp and 0 for key release
     with open(log_file, mode='a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
-        writer.writerow([timestamp, k, "U"])
+        writer.writerow([timestamp, k, 0])
   
   except Exception as e:
     print(f"Error: {e}")
@@ -77,7 +73,7 @@ def on_release(key):
 
 
 def main():
-  duration = 100  # duration of input time in seconds
+  duration = 30  # duration of input time in seconds
   
   # Initialize the listener
   listener = keyboard.Listener(on_press=on_press, on_release=on_release)
@@ -98,6 +94,7 @@ def main():
       print(f"Time remaining: {remaining}", end="\r")
 
       # creating anomalous data for the last 20 seconds of the time
+      # TODO: don't need this timewindow maybe
       if(remaining == anomalous_window):
         print("input 'anomolous' data:")
       time.sleep(1) # Check every second
