@@ -12,8 +12,6 @@ anomalous_window = dataCollection.anomalous_window
 
 # read data from csv file
 data = pd.read_csv('key_log.csv')
-
-# process data 
 sortedData = data.sort_values(['key', 'timestamp'])
 
 # convert data into numerical data

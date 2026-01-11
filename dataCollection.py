@@ -78,7 +78,7 @@ def main():
   # Initialize the listener
   listener = keyboard.Listener(on_press=on_press, on_release=on_release)
   
-  print(f"--- Logging Started ---")
+  print(f"--- Logging Started: start typing ---")
   print(f"Monitoring for {duration} seconds...")
   
   # Start the background thread
@@ -104,7 +104,7 @@ def main():
   
   # Stop the listener thread
   listener.stop()
-  print("\n--- Logging Finished ---")
+  print("\n--- Logging Finished: stop typing ---")
   print(f"Data saved to {log_file}")
 
 if __name__ == "__main__":
