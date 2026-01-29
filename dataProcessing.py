@@ -22,7 +22,7 @@ def keypress_processing(data):
   sortedData['next_timestamp'] = sortedData.groupby('key')['timestamp'].shift(-1)
   sortedData['next_action']    = sortedData.groupby('key')['action'].shift(-1)
 
-  # convert timestamp data into integers (in 1000 pico seconds or something)
+  # convert timestamp data into integers (in nano seconds or something)
   sortedData['timestamp'] = sortedData['timestamp'].astype(int)
   sortedData['next_timestamp'] = sortedData['next_timestamp'].astype(int)
 
@@ -43,13 +43,13 @@ def keypress_processing(data):
   # creating labels for key press data
   filtered_labels = filtered.sort_values(['timestamp'])
   max_time = filtered_labels['timestamp'].max()
-  treshold = max_time - anomalous_window
+  treshold = max_time - anomalous_window * 1e9
 
   press_labels = pd.DataFrame(columns=['label'])
   press_labels['label'] = (filtered_labels['timestamp'] >= treshold).astype(int)
 
-  print("\npress labels")
-  print(press_labels)
+  #print("\npress labels")
+  #print(press_labels)
   return (filtered, press_labels)
 
 # ----calculate the wait time between any key presses-------------------------------------------------------
@@ -78,11 +78,13 @@ def searchtime_processing(data):
   # creating labels for wait data
   timeData_labels = timeData.sort_values(['timestamp'])
   max_time = timeData_labels['timestamp'].max()
-  treshold = max_time - anomalous_window
+  treshold = max_time - anomalous_window * 1e9
+  #print(f"Labeling data with anomalous window size of {anomalous_window} with max timestamp {max_time} and treshold {treshold}")
+
 
   wait_labels = pd.DataFrame(columns=['label'])
   wait_labels['label'] = (timeData_labels['timestamp'] >= treshold).astype(int)
 
-  print("\nwait labels")
-  print(wait_labels)
+  #print("\nwait labels")
+  #print(wait_labels)
   return (timeData, wait_labels)

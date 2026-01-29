@@ -19,16 +19,13 @@ from pynput import keyboard
 from datetime import datetime
 
 # define time interval in seconds in which anomalous data is input
-anomalous_window = 20
+anomalous_window = 60
 
 # define file name for logging file of keyboard activity
 # note: the file will not be overwritten data just get appended
 log_file = "key_log.csv"
 with open(log_file, mode='a', newline='', encoding='utf-8') as f:
   csv.writer(f).writerow(["timestamp", "key", "action"])
-
-# define dataframe for live logging of keys
-live_keys = pd.DataFrame(columns=['timestamp', 'key', 'action'])
 
 # collecting data
 def on_press(key):
@@ -47,23 +44,6 @@ def on_press(key):
       writer = csv.writer(f)
       writer.writerow([timestamp, k, 1])
           
-  except Exception as e:
-    print(f"Error: {e}")
-  except KeyboardInterrupt:
-    print("Keyboard interrupt: manually stopped")
-
-def on_press_live(key):
-  # live_keys = pd.DataFrame(columns=['timestamp', 'key', 'action'])
-  global live_keys
-  try:
-    timestamp = datetime.now()
-    if hasattr(key, 'char') and key.char is not None:
-      k = ord(key.char)
-    else:
-      k = hash(key)
-    new_row = pd.DataFrame([[timestamp, k, 1]], columns=['timestamp', 'key', 'action'])
-    live_keys = pd.concat([live_keys, new_row], ignore_index=True)
-
   except Exception as e:
     print(f"Error: {e}")
   except KeyboardInterrupt:
@@ -90,25 +70,8 @@ def on_release(key):
   except KeyboardInterrupt:
     print("Keyboard interrupt: manually stopped")
 
-def on_release_live(key):
-  # live_keys = pd.DataFrame(columns=['timestamp', 'key', 'action'])
-  global live_keys
-  try:
-    timestamp = datetime.now()
-    if hasattr(key, 'char') and key.char is not None:
-      k = ord(key.char)
-    else:
-      k = hash(key)
-    new_row = pd.DataFrame([[timestamp, k, 0]], columns=['timestamp', 'key', 'action'])
-    live_keys = pd.concat([live_keys, new_row], ignore_index=True)
-
-  except Exception as e:
-    print(f"Error: {e}")
-  except KeyboardInterrupt:
-    print("Keyboard interrupt: manually stopped")
-
 def main():
-  duration = 60  # duration of input time in seconds
+  duration = 300  # duration of input time in seconds
   
   # Initialize the listener
   listener = keyboard.Listener(on_press=on_press, on_release=on_release)
@@ -128,11 +91,10 @@ def main():
       remaining = int(duration - (time.time() - start_time))
       print(f"Time remaining: {remaining}", end="\r")
 
-      # creating anomalous data for the last 20 seconds of the time
-      # TODO: don't need this timewindow maybe
-      #if(remaining == anomalous_window):
-      #  print("input 'anomolous' data:")
-      #time.sleep(1) # Check every second
+      # creating anomalous data for the last 60 seconds of the time
+      # if(remaining == anomalous_window):
+      #   print("input 'anomolous' data:")
+      # time.sleep(1) # Check every second
           
   except KeyboardInterrupt:
     print("\nManually stopped by user.")
