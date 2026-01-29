@@ -63,9 +63,9 @@ try:
     current_count = len(raw_event_buffer)
     
     if current_count < buffer_size:
-        print(f"Current Buffer: {current_count}/{buffer_size} keys...", end="\r")
-        time.sleep(0.5)
-        continue
+      print(f"Current Buffer: {current_count}/{buffer_size} keys...", end="\r")
+      time.sleep(0.5)
+      continue
     
     # convert to DataFrame for processing
     print("\nThreshold reached-> processing...")
