@@ -50,10 +50,12 @@ knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(press_train, press_label_train)
 joblib.dump(knn, 'knn_press_model.pkl')
 press_predictions_knn = knn.predict(press_test)
+print(f"press label predictions knn: {press_predictions_knn}")
 ## for search times
 knn.fit(wait_train, wait_label_train)
 joblib.dump(knn, 'knn_wait_model.pkl')
 wait_predictions_knn = knn.predict(wait_test)
+print(f"wait label predictions knn: {wait_predictions_knn}")
 
 # evaluate {accuracy_score(y_test, y_pred) * 100:.2f}%"
 print(f"Model Accuracy for press times with knn: {accuracy_score(press_label_test, press_predictions_knn) * 100:.2f}%")
@@ -63,8 +65,10 @@ print(f"Model Accuracy for wait times with knn: {accuracy_score(wait_label_test,
 dectree = DecisionTreeClassifier(criterion='entropy', max_depth=5)
 dectree.fit(press_train, press_label_train)
 press_predictions_dt = dectree.predict(press_test)
+print(f"press label predictions dt: {press_predictions_dt}")
 dectree.fit(wait_train, wait_label_train)
 wait_predictions_dt = dectree.predict(wait_test)
+print(f"wait label predictions dt: {wait_predictions_dt}")
 
 # evaluate accuracy of decision tree
 print(f"Model Accuracy for press times with decisiont tree: {accuracy_score(press_label_test, press_predictions_dt) * 100:.2f}%")

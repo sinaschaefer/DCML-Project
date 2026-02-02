@@ -19,7 +19,7 @@ from pynput import keyboard
 from datetime import datetime
 
 # define time interval in seconds in which anomalous data is input
-anomalous_window = 60
+anomalous_window = 300
 
 # define file name for logging file of keyboard activity
 # note: the file will not be overwritten data just get appended
@@ -71,7 +71,7 @@ def on_release(key):
     print("Keyboard interrupt: manually stopped")
 
 def main():
-  duration = 300  # duration of input time in seconds
+  duration = 600  # duration of input time in seconds
   
   # Initialize the listener
   listener = keyboard.Listener(on_press=on_press, on_release=on_release)
@@ -91,7 +91,7 @@ def main():
       remaining = int(duration - (time.time() - start_time))
       print(f"Time remaining: {remaining}", end="\r")
 
-      # creating anomalous data for the last 60 seconds of the time
+      # creating anomalous data for the last 'anomalous_window' seconds of the time
       # if(remaining == anomalous_window):
       #   print("input 'anomolous' data:")
       # time.sleep(1) # Check every second

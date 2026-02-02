@@ -36,7 +36,7 @@ def keypress_processing(data):
   # print data
   # NOTE: the differences beween up and down pairs does not match the wait time one usualy analyses
   #       it is the wait time until the same key is pressed again 
-  #       however this data is still usefull when detecting different writung patterns (e.g. languages)
+  #       however this data is still usefull when detecting different writung patterns
   print('Key press times')
   print(filtered)
 
