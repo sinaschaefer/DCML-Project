@@ -64,9 +64,11 @@ print(f"Model Accuracy for wait times with knn: {accuracy_score(wait_label_test,
 # make comparison of knn vs decisiontree ---------------------------------------------------------------
 dectree = DecisionTreeClassifier(criterion='entropy', max_depth=5)
 dectree.fit(press_train, press_label_train)
+joblib.dump(dectree, 'dt_press_model.pkl')
 press_predictions_dt = dectree.predict(press_test)
 print(f"press label predictions dt: {press_predictions_dt}")
 dectree.fit(wait_train, wait_label_train)
+joblib.dump(dectree, 'dt_wait_model.pkl')
 wait_predictions_dt = dectree.predict(wait_test)
 print(f"wait label predictions dt: {wait_predictions_dt}")
 

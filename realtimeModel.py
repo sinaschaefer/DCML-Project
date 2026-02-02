@@ -21,14 +21,16 @@ from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 # define buffer size
-buffer_size = 30
+buffer_size = 20
 
 # run model on incoming data
 print("Now run trained model on incomming data:")
 
-# load model
-loaded_press_model = joblib.load('knn_press_model.pkl')
-loaded_wait_model = joblib.load('knn_wait_model.pkl')
+# load models
+loaded_press_model_knn = joblib.load('knn_press_model.pkl')
+loaded_wait_model_knn = joblib.load('knn_wait_model.pkl')
+loaded_press_model_dt = joblib.load('dt_press_model.pkl')
+loaded_wait_model_dt = joblib.load('dt_wait_model.pkl')
 
 def get_live_data():
   # get data with listener
@@ -79,14 +81,20 @@ try:
     wait_data = dataProcessing.searchtime_processing(data_to_process)[0]
 
     # prediction
-    press_data_predictions = loaded_press_model.predict(press_data.values)
-    wait_data_predictions = loaded_wait_model.predict(wait_data.values)
+    press_data_predictions_knn = loaded_press_model_knn.predict(press_data.values)
+    wait_data_predictions_knn = loaded_wait_model_knn.predict(wait_data.values)
 
-    print(f"press_label: {press_data_predictions}")
-    print(f"wait_labels: {wait_data_predictions}")
+    press_data_predictions_dt = loaded_press_model_dt.predict(press_data.values)
+    wait_data_predictions_dt = loaded_wait_model_dt.predict(wait_data.values)
+
+    print(f"press_label knn: {press_data_predictions_knn}")
+    print(f"wait_labels knn: {wait_data_predictions_knn}")
+    print(f"press_label dt: {press_data_predictions_dt}")
+    print(f"wait_labels dt: {wait_data_predictions_dt}")
     
     # anomaly detection: if label predictions are 1 -> anomaly
-    if (press_data_predictions == 1).any() or (wait_data_predictions == 1).any():
+    if ((press_data_predictions_knn == 1).any() or (wait_data_predictions_knn == 1).any()
+       or (press_data_predictions_dt == 1).any() or (wait_data_predictions_dt == 1).any()):
       # trigger alert, shut down process
       print(f"ANOMALY DETECTED: stoped logging")
       listener.stop()
