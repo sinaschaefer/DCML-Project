@@ -37,7 +37,7 @@ def get_live_data():
   print(f"--- Logging Started: start typing ---")
   raw_data = dataCollection.live_keys
 
-# This list is shared between the Listener and the Main Loop
+# list is shared between the Listener and the Main Loop
 raw_event_buffer = []
 
 def on_press_live(key): 
@@ -72,7 +72,7 @@ try:
     # convert to DataFrame for processing
     print("\nThreshold reached-> processing...")
     
-    # Create DF from the snapshot of the buffer
+    # create DF from the snapshot of the buffer
     data_to_process = pd.DataFrame(raw_event_buffer[:buffer_size])
     
     # data processing
