@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-#from google.colab import files
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 import matplotlib.pyplot as plt
@@ -19,10 +18,10 @@ from pynput import keyboard
 from datetime import datetime
 
 # define time interval in seconds in which anomalous data is input
-anomalous_window = 300
+anomalous_window = 600
 
 # define file name for logging file of keyboard activity
-# note: the file will not be overwritten data just get appended
+# note: the file will not be overwritten data just gets appended
 log_file = "key_log.csv"
 with open(log_file, mode='a', newline='', encoding='utf-8') as f:
   csv.writer(f).writerow(["timestamp", "key", "action"])
@@ -71,7 +70,7 @@ def on_release(key):
     print("Keyboard interrupt: manually stopped")
 
 def main():
-  duration = 600  # duration of input time in seconds
+  duration = 1200  # duration of input time in seconds (here 10 minutes)
   
   # Initialize the listener
   listener = keyboard.Listener(on_press=on_press, on_release=on_release)
@@ -92,6 +91,7 @@ def main():
       print(f"Time remaining: {remaining}", end="\r")
 
       # creating anomalous data for the last 'anomalous_window' seconds of the time
+      # uncomment following lines if anomalous data should be collected in same run than normal data
       # if(remaining == anomalous_window):
       #   print("input 'anomolous' data:")
       # time.sleep(1) # Check every second

@@ -8,9 +8,9 @@ import dataCollection
 
 from datetime import timedelta
 
+# get length aof anomalous window from the dataCollection file
 anomalous_window = dataCollection.anomalous_window
 
-# read data from csv file
 def keypress_processing(data):
   sortedData = data.sort_values(['key', 'timestamp'])
 
@@ -53,8 +53,8 @@ def keypress_processing(data):
   return (filtered, press_labels)
 
 # ----calculate the wait time between any key presses-------------------------------------------------------
-# convert data into numerical data
 def searchtime_processing(data):
+  # convert data into numerical data
   timeData = data.sort_values(['timestamp'])
   timeData['timestamp'] = pd.to_datetime(timeData['timestamp'], errors='coerce')
   timeData['action'] = pd.to_numeric(timeData['action'], errors='coerce').astype('Int64')
@@ -80,7 +80,6 @@ def searchtime_processing(data):
   max_time = timeData_labels['timestamp'].max()
   treshold = max_time - anomalous_window * 1e9
   #print(f"Labeling data with anomalous window size of {anomalous_window} with max timestamp {max_time} and treshold {treshold}")
-
 
   wait_labels = pd.DataFrame(columns=['label'])
   wait_labels['label'] = (timeData_labels['timestamp'] >= treshold).astype(int)

@@ -13,7 +13,7 @@ import model
 from pynput import keyboard
 from datetime import datetime
 
-# for knn classification
+# for classifiers
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
@@ -23,7 +23,6 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 # define buffer size
 buffer_size = 20
 
-# run model on incoming data
 print("Now run trained model on incomming data:")
 
 # load models
@@ -40,6 +39,7 @@ def get_live_data():
 # list is shared between the Listener and the Main Loop
 raw_event_buffer = []
 
+# build and initialaise the listener
 def on_press_live(key): 
   if hasattr(key, 'char') and key.char is not None:
     k = ord(key.char)
@@ -61,7 +61,7 @@ listener.start()
 
 try:
   while True:
-    # check the length of buffer list
+    # check length of buffer list
     current_count = len(raw_event_buffer)
     
     if current_count < buffer_size:
